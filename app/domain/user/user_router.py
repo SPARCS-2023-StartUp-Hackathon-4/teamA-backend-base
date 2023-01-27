@@ -10,11 +10,10 @@ from starlette import status
 from database import get_db
 from domain.user import user_crud, user_schema
 from domain.user.user_crud import pwd_context
-from common.config import SECRET_KEY
 
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60*24
-SECRET_KEY = SECRET_KEY
+SECRET_KEY = "4ab2fce7a6bd79e1c014396315ed322dd6edb1c5d975c6b74a2904135172c03c"
 ALGORITHM = "HS256"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
 
@@ -38,17 +37,12 @@ def user_create(_user_create: user_schema.UserCreate,
                           user_create=_user_create)
 
 
-@router.post("/{username}", status_code=status.HTTP_204_NO_CONTENT)
-def user_delete(username: str,
-                token: str = Depends(oauth2_scheme),
+@router.get("/", response_model=user_schema.UserGet)
+def get_current(token: str = Depends(oauth2_scheme),
                 db: Session = Depends(get_db)):
-    current_user = get_current_user(token, db)
-    if current_user.username == username:
-        user_crud.delete_user(db, username)
 
-    else:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
-                            detail='Incorrect Username')
+    current_user = get_current_user(token, db)
+    return current_user
 
 
 @router.post("/login", response_model=user_schema.Token)
@@ -79,12 +73,17 @@ def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),
     }
 
 
-@router.get("/", response_model=user_schema.UserGet)
-def get_current(token: str = Depends(oauth2_scheme),
+@router.post("/{username}", status_code=status.HTTP_204_NO_CONTENT)
+def user_delete(username: str,
+                token: str = Depends(oauth2_scheme),
                 db: Session = Depends(get_db)):
-
     current_user = get_current_user(token, db)
-    return current_user
+    if current_user.username == username:
+        user_crud.delete_user(db, username)
+
+    else:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail='Incorrect Username')
 
 
 def get_current_user(token: str = Depends(oauth2_scheme),

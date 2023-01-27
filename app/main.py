@@ -13,6 +13,7 @@ origins = [
     "http://127.0.0.1:8000",
 ]
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -22,7 +23,7 @@ app.add_middleware(
 )
 
 
+app.include_router(user_router.router)
 app.include_router(bplan_router.router)
 # app.include_router(vac_router.router)
-app.include_router(user_router.router)
 app.include_router(portfolio_router.router)

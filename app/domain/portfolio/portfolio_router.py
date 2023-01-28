@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/list", response_model=list[portfolio_schema.PortfolioCreate])
+@router.get("/list", response_model=List[portfolio_schema.PortfolioCreate])
 def read_portfolio_list(db: Session = Depends(get_db),
                         user: User = Depends(get_current_user)):
     _portfolio = portfolio_crud.read_portfolio_list(db=db, user=user)

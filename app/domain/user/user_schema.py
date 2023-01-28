@@ -22,6 +22,7 @@ class UserCreate(BaseModel):
 class UserGet(BaseModel):
     username: str
     email: EmailStr
+    id: int
 
     class Config:
         orm_mode = True

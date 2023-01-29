@@ -8,7 +8,6 @@ class ArticleBase(BaseModel):
     pass
 
 
-
 class ArticleRead(BaseModel):
     id: int
     title: str

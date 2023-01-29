@@ -34,7 +34,7 @@ def read_article_list(db: Session = Depends(get_db)):
 def update_article(id: int, _update_article: article_schema.ArticleCreate,
                    db: Session = Depends(get_db),
                    user: User = Depends(get_current_user)):
-    article = read_article(id)
+    article = article_crud.read_article(id, db)
     if user.id == article.user_id:
         article_crud.update_article(_update_article=_update_article,
                                     article=article,
@@ -44,6 +44,6 @@ def update_article(id: int, _update_article: article_schema.ArticleCreate,
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_article(id: int, db: Session = Depends(get_db),
                    user: User = Depends(get_current_user)):
-    article = read_article(id)
+    article = article_crud.read_article(id, db)
     if user.id == article.user_id:
         article_crud.delete_article(article, db)

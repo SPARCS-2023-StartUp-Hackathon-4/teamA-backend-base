@@ -14,4 +14,6 @@ def get_trend():
     with open('counts.pickle', 'rb') as f:
         counts = pickle.load(f)
         counts: Counter
-    return sorted([(x, y) for x, y in dict(counts).items()], key=lambda x: x[1], reverse=True)
+    return {
+        'trend': sorted([(x, y) for x, y in dict(counts).items()], key=lambda x: x[1], reverse=True)
+    }

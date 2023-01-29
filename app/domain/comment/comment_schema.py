@@ -4,9 +4,7 @@ from pydantic import BaseModel, validator
 from typing import List
 
 
-class PortfolioCreate(BaseModel):
-    title: str
+class CommentCreate(BaseModel):
     content: str
 
-    class Config:
-        orm_mode = True
+
